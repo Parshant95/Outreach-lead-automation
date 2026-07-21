@@ -1,0 +1,16 @@
+services:
+  api:
+    build: ./services/api
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/api/secrets:/app/secrets:ro
+  web:
+    build: ./apps/web
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
+    ports:
+      - "3002:3000"
+    depends_on:
+      - api
